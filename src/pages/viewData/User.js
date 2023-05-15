@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"
 import { Link } from "react-router-dom";
-import { UsetransData } from "../../contexts/transection";
+import { useSelector } from "react-redux";
 
 
 const Pdata = () => {
 
     const { id } = useParams();
 
-    const {contextData,setcontextData} = UsetransData()
-    const retrivedata = contextData
+    const reduxData = useSelector((state) => state.transection)
+
+    // const {contextData,setcontextData} = UsetransData()
+    const retrivedata = reduxData
 
     const [d , setdata] = useState([])
 

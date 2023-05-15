@@ -3,9 +3,16 @@ import { Link, useNavigate } from "react-router-dom";
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { adduser } from "../../redux-duck/registerslice";
 
 const Register = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+
+    const reduxData = useSelector((state) => state.register)
+
 
     const values = {
         uname: "",
@@ -41,21 +48,23 @@ const Register = () => {
 
     useEffect(() => {
         if (issubmit) {
-            const retrivedata = JSON.parse(localStorage.getItem('userdata'))
+            const retrivedata = reduxData
 
-            if (localStorage.getItem('userdata') !== null) {
+            if (reduxData !== null) {
                 let previd = retrivedata[retrivedata.length - 1].id;
 
                     foValues['id'] = previd + 1;
-                    retrivedata.push(foValues)
-                console.log(retrivedata,">>>>>>>>>")
-                    localStorage.setItem('userdata', JSON.stringify(retrivedata))
+                    // retrivedata.push(foValues)
+                    console.log("newwwwwwwwwwwww");
+                    dispatch(adduser(foValues))
+                    // localStorage.setItem('userdata', JSON.stringify(retrivedata))
             }
             else {
 
                 foValues['id'] = 1;
+                dispatch(adduser(foValues))
 
-                localStorage.setItem('userdata', JSON.stringify([foValues]))
+                // localStorage.setItem('userdata', JSON.stringify([foValues]))
             }
 
             navigate('/login')

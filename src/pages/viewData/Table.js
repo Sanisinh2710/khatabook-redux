@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { UsetransData } from "../../contexts/transection";
+import { useDispatch, useSelector } from "react-redux";
+import { deletetransection } from "../../redux-duck/transectionslice";
 
 let date = new Date();
 let year = date.getFullYear();
@@ -9,15 +10,16 @@ const months = [`Jan ${year}`, `Feb ${year}`, `Mar ${year}`, `Apr ${year}`, `May
 const Table = (props) => {
 
     const records = props.records;
-    const { contextData, setcontextData } = UsetransData()
 
+    const reduxData = useSelector((state) => state.transection)
+    
     const [data, setData] = useState(records)
     const [sortedField, setSortedField] = useState({});
 
 
     useEffect(() => {
-        setData(records)
-    }, [records])
+        setData(props.records)
+    }, [props.records])
 
     useEffect(() => {
         if (sortedField.direction === "normal") {
@@ -159,24 +161,15 @@ const Table = (props) => {
         }
     }
 
-    // function drop(arr, id) {
-    //     // Making a copy with the Array from() method
-    //     const arrCopy = Array.from(arr);
 
-    //     const objWithIdIndex = arrCopy.findIndex((obj) => obj.id === id);
-    //     arrCopy.splice(objWithIdIndex, 1);
-    //     setData(arrCopy)
-    //     return arrCopy;
-    // }
+    const dispatch = useDispatch();
 
-    const deleteData = (id) => {
-        // differ();
-        console.log(id,">");
-        const deleteData = [...contextData];
+    const deleteData = (id) => {      
+        const deleteData = [...reduxData];
         const deletedData = deleteData.filter((value) => parseInt(value.id) !== parseInt(id));
-        console.log(deletedData, ">>>>>>>>");
-        setcontextData(deletedData);
-        // setCurrentPage(1);
+        dispatch(deletetransection(deletedData))
+        setCurrentPage(1)
+
     };
 
     return <>

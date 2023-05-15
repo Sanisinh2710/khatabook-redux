@@ -2,29 +2,35 @@ import { Link, useNavigate } from "react-router-dom";
 import './css/viewdata.css'
 import { useEffect, useState } from "react";
 import Table from "./Table";
-import { UsetransData } from "../../contexts/transection";
+import { useSelector } from "react-redux";
+import { Cookies } from "react-cookie";
 
 const ViewData = () => {
     const navigate = useNavigate();
+    const cookie1 = new Cookies();
+    const reduxData = useSelector((state) => state.transection)
+  
+    const [traData ,settraData] = useState(reduxData)
 
-
-    const { contextData, setcontextData } = UsetransData()
-    const retrivedata = contextData
+     
+    // const { contextData, setcontextData } = UsetransData()
+    const retrivedata = reduxData
     const [groupBy, setgroupBy] = useState([]);
     const [gval, setgval] = useState("")
 
     useEffect(() => {
-        setcontextData(contextData);
-    }, [contextData]);
+        settraData(reduxData)
+    }, [reduxData]);
 
     useEffect(() => {
         value(gval)
-    }, [contextData]);
+        //eslint-disable-next-line
+    }, [traData]);
 
 
     const value = (ele) => {
 
-        let data = [...retrivedata];
+        let data = retrivedata;
 
         let gdata = {};
 
@@ -60,9 +66,9 @@ const ViewData = () => {
 
 
     const logout = () => {
-
-        localStorage.removeItem('tempdata');
-
+        debugger
+        // localStorage.removeItem('tempdata');
+        cookie1.remove('tempdata');
         navigate('/public/login');
 
     }
