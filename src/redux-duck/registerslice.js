@@ -1,4 +1,4 @@
-import { createSlice, current } from '@reduxjs/toolkit'
+import { createSlice} from '@reduxjs/toolkit'
 
 const initialState = [{uname:"Sanisinh",email:"xyz@gmail.com",password:"123456",id:1}]
 

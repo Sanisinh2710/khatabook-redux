@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { deletetransection } from "../../redux-duck/transectionslice";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 let date = new Date();
 let year = date.getFullYear();
@@ -164,11 +167,18 @@ const Table = (props) => {
 
     const dispatch = useDispatch();
 
-    const deleteData = (id) => {      
-        const deleteData = [...reduxData];
-        const deletedData = deleteData.filter((value) => parseInt(value.id) !== parseInt(id));
-        dispatch(deletetransection(deletedData))
-        setCurrentPage(1)
+    const deleteData = (id) => {
+        toast.error('User Deleted', {
+            position: toast.POSITION.TOP_RIGHT
+        });
+
+        setTimeout(() => {
+            
+            const deleteData = [...reduxData];
+            const deletedData = deleteData.filter((value) => parseInt(value.id) !== parseInt(id));
+            dispatch(deletetransection(deletedData))
+            setCurrentPage(1)
+        }, 1000);
 
     };
 
@@ -209,7 +219,8 @@ const Table = (props) => {
                                     <td><img src={data.receipt} width={50} height={50} alt="" /></td>
                                     <td><Link to={`/transection/${data.id}`}>Edit</Link></td>
                                     <td><Link to={`/view-data/${data.id}`}>View</Link></td>
-                                    <td><i onClick={() => deleteData(data.id)} className="fa fa-trash-o" style={{ fontSize: 25 }}></i></td>
+                                    <td><i onClick={() => deleteData(data.id)} className="fa fa-trash-o" style={{ fontSize: 25,cursor:"pointer" }}></i></td>
+                                    <ToastContainer />
                                 </tr>
                             </tbody>
                         )

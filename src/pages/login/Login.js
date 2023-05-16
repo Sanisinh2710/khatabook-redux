@@ -19,7 +19,7 @@ const Login = () => {
    
     const [loading, setloading] = useState(false)
     const [cookies,setCookie] = useCookies(['tempdata']);
-
+    console.log(cookies)    ;
     const reduxData = useSelector((state) => state.register)
 
     const data = reduxData
@@ -29,7 +29,7 @@ const Login = () => {
 
 
     const schema = yup.object().shape({
-        email: yup.string().required('Please enter your Name'),
+        email: yup.string().required('Please enter your Email'),
         password: yup.string().required('Please enter your Password')
     })
 
