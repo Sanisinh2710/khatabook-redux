@@ -6,13 +6,14 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { addtransection, updatetransection } from "../../redux-duck/transectionslice";
-
+import { ThreeDots } from "react-loader-spinner";
 
 
 const Transection = () => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [loading, setloading] = useState(false)
 
     const { id } = useParams();
 
@@ -116,6 +117,12 @@ const Transection = () => {
     }
 
 
+    useEffect(() => {
+        setloading(true)
+        setTimeout(() => {
+            setloading(false);
+        }, 1000)
+    }, [])
 
 
     useEffect(() => {
@@ -128,7 +135,7 @@ const Transection = () => {
                 // const retrivedata = JSON.parse(localStorage.getItem('fovalues'))
 
                 if (id) {
-                    
+
                     dispatch(updatetransection(foValues))
                 } else {
                     let previd = retrivedata[retrivedata.length - 1].id;
@@ -162,6 +169,19 @@ const Transection = () => {
 
     return (
         <>
+        {
+            loading?
+            <>
+            <ThreeDots
+                height="80"
+                width="80"
+                radius="9"
+                color="purple"
+                wrapperStyle={{marginTop:250,marginLeft:600,}}
+                
+            />
+            </>:
+            <>
             <div className="container">
                 <h2>Khata-book</h2>
                 <form className="form" onSubmit={handleSubmit(onSubmit)}>
@@ -305,6 +325,10 @@ const Transection = () => {
                 </div>
             </div>
         </>
+        }
+        </>
+        
+        
     );
 };
 
