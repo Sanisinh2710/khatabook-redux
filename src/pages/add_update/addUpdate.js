@@ -4,19 +4,15 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
-import { addtransection, updatetransection } from "../../redux-duck/transectionslice";
-import { ThreeDots } from "react-loader-spinner";
-
 
 const Transection = () => {
 
     const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const [loading, setloading] = useState(false)
+
 
     const { id } = useParams();
 
+    const getdata = JSON.parse(localStorage.getItem('fovalues'))
 
     const schema = yup.object().shape({
         tdate: yup.string().required('Please enter Transection Date'),
@@ -33,7 +29,7 @@ const Transection = () => {
                 return true
             }
             else {
-                return value[0] && value[0].size <= 1000000
+                return value[0] && value[0].size <= 100000
             }
         }),
 
@@ -58,13 +54,6 @@ const Transection = () => {
     };
 
 
-    const reduxData = useSelector((state) => state.transection)
-
-    // const {contextData,setcontextData} = UsetransData()
-    // console.log(contextData);
-
-    const getdata = reduxData
-
     const [foValues, setfoValues] = useState(values);
 
 
@@ -78,18 +67,101 @@ const Transection = () => {
         //eslint-disable-next-line
     }, [id])
 
-    let dummy = getdata.filter((value) => {
-        return parseInt(value.id) === parseInt(id)
-    });
+    let dummy = getdata.filter((value) =>{
+            return parseInt(value.id) === parseInt(id)
+        });
+
 
 
     const { register, handleSubmit, setValue, formState: { errors } } = useForm({
-        resolver: yupResolver(schema), defaultValues: dummy[0]
+        resolver: yupResolver(schema), 
+        defaultValues: dummy[0]
     });
 
     const [issubmit, setIssubmit] = useState(false);
+    
+    // const [foerror, setfoerror] = useState({});
 
 
+
+
+
+
+    // console.log(foValues);
+    // const getvalues = (e) => {
+    //     const { name, value } = e.target;
+
+
+
+    //     if (e.target.type === "file") {
+    //         if (e.target.files[0]) {
+    //             if (e.target.files[0].size >= "100000") {
+    //                 alert("File size is too large");
+
+
+    //             } else {
+    //                 let freader = new FileReader();
+    //                 freader.readAsDataURL(e.target.files[0]);
+    //                 console.log(freader)
+    //                 freader.addEventListener('load', function () {
+
+    //                     let val = this.result
+    //                     setfoValues({ ...foValues, receipt: val })
+    //                 })
+    //             }
+    //         }
+    //     }
+    //     else {
+
+    //         setfoValues({ ...foValues, [name]: value });
+    //     }
+    // };
+
+    // const validation = (values) => {
+    //     const errors = {};
+    //     if (!values.tdate) {
+    //         errors.tdate = "Enter your transaction date";
+    //     }
+    //     if (!values.monthYear) {
+    //         errors.monthYear = "Select a month and year";
+    //     }
+    //     if (!values.ttype) {
+    //         errors.ttype = "Select Transection type";
+    //     }
+    //     if (!values.amount) {
+    //         errors.amount = "Enter your Amount";
+    //     }
+    //     if (!values.fromAccount) {
+    //         errors.fromAccount = "Please select Acoount";
+    //     }
+    //     if (!values.toAccount) {
+    //         errors.toAccount = "Please select Acoount";
+    //     }
+    //     if ((values.fromAccount === values.toAccount) && (values.fromAccount.length > 0) && (values.toAccount.length > 0)) {
+    //         errors.same = "From Account and to Account must be different ";
+    //     }
+
+    //     if (!values.receipt) {
+    //         errors.receipt = "Please choose a transaction Receipt and a transaction Receipt must be less than or equal to 1 mb";
+    //     }
+
+    //     if (values.remarks.trim() === "") {
+    //         errors.remarks = "Write a remarks";
+    //     } else if (values.remarks.length > 250) {
+    //         errors.remarks = " remarks  too long";
+    //     }
+
+    //     return errors;
+    // };
+
+    // const submit = (e) => {
+    //     e.preventDefault();
+
+    //     setfoerror(validation(foValues));
+    //     setIssubmit(true)
+
+
+    // };
 
     const remove = () => {
 
@@ -103,7 +175,6 @@ const Transection = () => {
         await new Promise(resolve => reader.onload = () => resolve())
         return reader.result
     }
-
     const onSubmit = async (data) => {
 
         if (typeof (data.receipt) !== "string") {
@@ -117,44 +188,40 @@ const Transection = () => {
     }
 
 
-    useEffect(() => {
-        setloading(true)
-        setTimeout(() => {
-            setloading(false);
-        }, 1000)
-    }, [])
 
 
     useEffect(() => {
 
         if (issubmit) {
-            let retrivedata = reduxData
-            if (retrivedata !== null) {
+            if (localStorage.getItem('fovalues') !== null) {
 
 
-                // const retrivedata = JSON.parse(localStorage.getItem('fovalues'))
+                const retrivedata = JSON.parse(localStorage.getItem('fovalues'))
 
                 if (id) {
+                    for (const e in retrivedata) {
 
-                    dispatch(updatetransection(foValues))
+                        if (parseInt(retrivedata[e].id) === parseInt(id)) {
+                            foValues['id'] = id;
+                            retrivedata[e] = foValues;
+                        }
+                    }
                 } else {
                     let previd = retrivedata[retrivedata.length - 1].id;
 
                     foValues['id'] = previd + 1;
-                    // retrivedata.push(foValues)
-                    dispatch(addtransection(foValues))
+                    retrivedata.push(foValues)
                 }
 
-                // setcontextData(retrivedata)
-                // localStorage.setItem('fovalues', JSON.stringify(retrivedata))
+
+
+                localStorage.setItem('fovalues', JSON.stringify(retrivedata))
 
             } else {
 
                 foValues['id'] = 1;
-                // setcontextData(retrivedata)
-                dispatch(addtransection(foValues))
 
-                // localStorage.setItem('fovalues', JSON.stringify([foValues]))
+                localStorage.setItem('fovalues', JSON.stringify([foValues]))
 
             }
             navigate('/view-data');
@@ -169,19 +236,6 @@ const Transection = () => {
 
     return (
         <>
-        {
-            loading?
-            <>
-            <ThreeDots
-                height="80"
-                width="80"
-                radius="9"
-                color="purple"
-                wrapperStyle={{marginTop:250,marginLeft:600,}}
-                
-            />
-            </>:
-            <>
             <div className="container">
                 <h2>Khata-book</h2>
                 <form className="form" onSubmit={handleSubmit(onSubmit)}>
@@ -284,15 +338,13 @@ const Transection = () => {
                                         type="file"
                                         name="receipt"
                                         accept="image/*"
-                                        {...register("receipt",
-                                            {
-                                                onChange: async (e) => {
-                                                    let file = await bs(e.target.files[0])
+                                        {...register("receipt", {
+                                            onChange: async (e) => {
+                                                let file = await bs(e.target.files[0])
 
-                                                    setfoValues({ ...foValues, receipt: file })
-                                                }
+                                                setfoValues({ ...foValues, receipt: file })
                                             }
-                                        )}
+                                        })}
                                     // value={foValues.receipt}
 
                                     />
@@ -325,10 +377,6 @@ const Transection = () => {
                 </div>
             </div>
         </>
-        }
-        </>
-        
-        
     );
 };
 

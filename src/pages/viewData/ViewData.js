@@ -1,118 +1,50 @@
 import { Link, useNavigate } from "react-router-dom";
 import './css/viewdata.css'
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Table from "./Table";
-import { useSelector } from "react-redux";
-import { Cookies } from "react-cookie";
-import { ThreeDots } from "react-loader-spinner";
+
 
 const ViewData = () => {
     const navigate = useNavigate();
-    const cookie1 = new Cookies();
-    const reduxData = useSelector((state) => state.transection)
 
-    const [traData, settraData] = useState(reduxData)
-
-    const [loading, setloading] = useState(false)
+    const retrivedata = JSON.parse(localStorage.getItem('fovalues'))
 
 
-    // const { contextData, setcontextData } = UsetransData()
-    const retrivedata = reduxData
     const [groupBy, setgroupBy] = useState([]);
-    const [gval, setgval] = useState("")
-
-    useEffect(() => {
-        settraData(reduxData)
-    }, [reduxData]);
-
-    useEffect(() => {
-        value(gval)
-        //eslint-disable-next-line
-    }, [traData]);
-
-    useEffect(() => {
-        setloading(true)
-        setTimeout(() => {
-            setloading(false);
-        }, 1000)
-    }, [])
-
     const value = (ele) => {
-
-        let data = retrivedata;
+        let data = [...retrivedata];
 
         let gdata = {};
 
-        if (ele.target) {
-            setgval(ele.target.value)
-            if (ele.target.value) {
-                data.forEach((items) => {
+        if(ele.target.value){
 
-                    let item = items[ele.target.value]
-                    console.log(items);
-                    gdata[item] = gdata[item] ?? [];
-                    gdata[item].push(items);
-                })
-                setgroupBy(gdata)
-            } else {
-                setgroupBy([])
-            }
+            data.forEach((items) => {
+    
+                let item = items[ele.target.value]
+                console.log(items);
+                gdata[item] = gdata[item] ?? [];
+                gdata[item].push(items);
+            })
+            setgroupBy(gdata)
+        }else{
+            setgroupBy([])
         }
-        else {
-            if (ele) {
-                data.forEach((items) => {
-
-                    let item = items[ele]
-                    console.log(items);
-                    gdata[item] = gdata[item] ?? [];
-                    gdata[item].push(items);
-                })
-                setgroupBy(gdata)
-            }
-        }
+        console.log(gdata);
     }
 
 
 
-    const logout = () => {
+    const logout = () =>{
 
-        cookie1.remove('tempdata',{path: '/'});
-        window.location.reload();
+        localStorage.removeItem('tempdata');
+
         navigate('/public/login');
 
     }
-//     {
-//         loading ?
-//             <ThreeDots
-//                 height="80"
-//                 width="80"
-//                 radius="9"
-//                 color="purple"
-//                 ariaLabel="three-dots-loading"
-//                 visible={true}
-//             />
-//             :
 
-// }
-
-
-    console.log(Object.keys(groupBy).length);
+console.log( Object.keys(groupBy).length);
     return (
         <>
-        {
-            loading?
-            <>
-            <ThreeDots
-                height="80"
-                width="80"
-                radius="9"
-                color="purple"
-                wrapperStyle={{marginTop:250,marginLeft:600,}}
-                
-            />
-            </>:
-            <>
-            
             {
                 retrivedata ? <>
                     <>
@@ -129,22 +61,43 @@ const ViewData = () => {
                                 <option value={"remarks"}>Remarks</option>
                             </select>
                         </div>
-
+                        
                         <br></br>
                         {
-                            groupBy.length === 0 ? <><Table records={retrivedata} />
-                                <br></br></> : Object.keys(groupBy).map((d, i) => (
-                                    <>
-                                        {
-                                            d !== 'undefined' ? <>
-                                                <h2> GroupBy: {d}</h2>
-                                                <Table records={groupBy[d]} />
-                                            </> : null
-                                        }
+                            groupBy.length === 0 ?<><Table records={retrivedata} />
+                            <br></br></>:Object.keys(groupBy).map((d, i) => (
+                                <>
+                                    {
+                                        d !== 'undefined' ? <>
+                                            <h2> GroupBy: {d}</h2>
+                                            <Table records={groupBy[d]} />
+                                        </> : null
+                                    }
 
-                                    </>
-                                ))
+                                </>
+                            ))
                         }
+                        {/* <Table records={retrivedata} />
+                        <br></br>
+
+                        <br></br>
+
+                        {
+
+                            Object.keys(groupBy).map((d, i) => (
+                                <>
+                                    {
+                                        d !== 'undefined' ? <>
+                                            <h2> GroupBy: {d}</h2>
+                                            <Table records={groupBy[d]} />
+                                        </> : null
+                                    }
+
+                                </>
+                            ))
+                        } */}
+
+
                     </>
                 </> : <>
                     <h1>No Data Found</h1>
@@ -152,14 +105,11 @@ const ViewData = () => {
 
 
             }
-            <div>
-                <Link className="button-30" to={'/transection'}>New Transection</Link>
-                <button className="button-30" onClick={logout}>Logout</button>
-            </div>
+                    <div>
+                        <Link className="button-30" to={'/transection'}>New Transection</Link>
+                        <button className="button-30" onClick={logout}>Logout</button>
+                    </div>
         </>
-        }
-        </>
-        
 
     )
 

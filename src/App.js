@@ -7,24 +7,20 @@ import {
 
 import Auth from './routes/auth';
 import  Unauth  from './routes/unauth';
-import { store } from './redux-duck/store'
-import { Provider } from 'react-redux'
-import { CookiesProvider } from 'react-cookie';
 
 const App = () => {
 
 
     return (
-        <CookiesProvider>
-        <Provider store={store}>
-            <Router>
+
+        <Router>
             <Routes>
                 <Route path="/public/*" element={<Unauth/>} />
                 <Route path="*" element={<Auth/>} />
             </Routes>
         </Router>
-        </Provider>
-        </CookiesProvider>
+
+
     )
 
 }
