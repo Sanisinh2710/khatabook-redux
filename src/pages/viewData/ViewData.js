@@ -2,44 +2,29 @@ import { Link, useNavigate } from "react-router-dom";
 import './css/viewdata.css'
 import { useEffect, useState } from "react";
 import Table from "./Table";
-import { useSelector } from "react-redux";
-import { Cookies } from "react-cookie";
-import { ThreeDots } from "react-loader-spinner";
+import { UsetransData } from "../../contexts/transection";
 
 const ViewData = () => {
     const navigate = useNavigate();
-    const cookie1 = new Cookies();
-    const reduxData = useSelector((state) => state.transection)
-
-    const [traData, settraData] = useState(reduxData)
-
-    const [loading, setloading] = useState(false)
 
 
-    // const { contextData, setcontextData } = UsetransData()
-    const retrivedata = reduxData
+    const { contextData, setcontextData } = UsetransData()
+    const retrivedata = contextData
     const [groupBy, setgroupBy] = useState([]);
     const [gval, setgval] = useState("")
 
     useEffect(() => {
-        settraData(reduxData)
-    }, [reduxData]);
+        setcontextData(contextData);
+    }, [contextData]);
 
     useEffect(() => {
         value(gval)
-        //eslint-disable-next-line
-    }, [traData]);
+    }, [contextData]);
 
-    useEffect(() => {
-        setloading(true)
-        setTimeout(() => {
-            setloading(false);
-        }, 1000)
-    }, [])
 
     const value = (ele) => {
 
-        let data = retrivedata;
+        let data = [...retrivedata];
 
         let gdata = {};
 
@@ -47,21 +32,21 @@ const ViewData = () => {
             setgval(ele.target.value)
             if (ele.target.value) {
                 data.forEach((items) => {
-
+    
                     let item = items[ele.target.value]
                     console.log(items);
                     gdata[item] = gdata[item] ?? [];
                     gdata[item].push(items);
                 })
                 setgroupBy(gdata)
-            } else {
+            } else { 
                 setgroupBy([])
             }
         }
-        else {
+        else{
             if (ele) {
                 data.forEach((items) => {
-
+    
                     let item = items[ele]
                     console.log(items);
                     gdata[item] = gdata[item] ?? [];
@@ -76,43 +61,15 @@ const ViewData = () => {
 
     const logout = () => {
 
-        cookie1.remove('tempdata',{path: '/'});
-        window.location.reload();
+        localStorage.removeItem('tempdata');
+
         navigate('/public/login');
 
     }
-//     {
-//         loading ?
-//             <ThreeDots
-//                 height="80"
-//                 width="80"
-//                 radius="9"
-//                 color="purple"
-//                 ariaLabel="three-dots-loading"
-//                 visible={true}
-//             />
-//             :
-
-// }
-
 
     console.log(Object.keys(groupBy).length);
     return (
         <>
-        {
-            loading?
-            <>
-            <ThreeDots
-                height="80"
-                width="80"
-                radius="9"
-                color="purple"
-                wrapperStyle={{marginTop:250,marginLeft:600,}}
-                
-            />
-            </>:
-            <>
-            
             {
                 retrivedata ? <>
                     <>
@@ -145,6 +102,27 @@ const ViewData = () => {
                                     </>
                                 ))
                         }
+                        {/* <Table records={retrivedata} />
+                        <br></br>
+
+                        <br></br>
+
+                        {
+
+                            Object.keys(groupBy).map((d, i) => (
+                                <>
+                                    {
+                                        d !== 'undefined' ? <>
+                                            <h2> GroupBy: {d}</h2>
+                                            <Table records={groupBy[d]} />
+                                        </> : null
+                                    }
+
+                                </>
+                            ))
+                        } */}
+
+
                     </>
                 </> : <>
                     <h1>No Data Found</h1>
@@ -157,9 +135,6 @@ const ViewData = () => {
                 <button className="button-30" onClick={logout}>Logout</button>
             </div>
         </>
-        }
-        </>
-        
 
     )
 

@@ -1,6 +1,6 @@
 
 
-export const initialState = [
+export const intialvalues = [
     {
         remarks: "Uttam",
         receipt:

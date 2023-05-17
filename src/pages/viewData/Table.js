@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { deletetransection } from "../../redux-duck/transectionslice";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
+import { UsetransData } from "../../contexts/transection";
 
 let date = new Date();
 let year = date.getFullYear();
@@ -13,16 +9,15 @@ const months = [`Jan ${year}`, `Feb ${year}`, `Mar ${year}`, `Apr ${year}`, `May
 const Table = (props) => {
 
     const records = props.records;
+    const { contextData, setcontextData } = UsetransData()
 
-    const reduxData = useSelector((state) => state.transection)
-    
     const [data, setData] = useState(records)
     const [sortedField, setSortedField] = useState({});
 
 
     useEffect(() => {
-        setData(props.records)
-    }, [props.records])
+        setData(records)
+    }, [records])
 
     useEffect(() => {
         if (sortedField.direction === "normal") {
@@ -164,22 +159,24 @@ const Table = (props) => {
         }
     }
 
+    // function drop(arr, id) {
+    //     // Making a copy with the Array from() method
+    //     const arrCopy = Array.from(arr);
 
-    const dispatch = useDispatch();
+    //     const objWithIdIndex = arrCopy.findIndex((obj) => obj.id === id);
+    //     arrCopy.splice(objWithIdIndex, 1);
+    //     setData(arrCopy)
+    //     return arrCopy;
+    // }
 
     const deleteData = (id) => {
-        toast.error('User Deleted', {
-            position: toast.POSITION.TOP_RIGHT
-        });
-
-        setTimeout(() => {
-            
-            const deleteData = [...reduxData];
-            const deletedData = deleteData.filter((value) => parseInt(value.id) !== parseInt(id));
-            dispatch(deletetransection(deletedData))
-            setCurrentPage(1)
-        }, 1000);
-
+        // differ();
+        console.log(id,">");
+        const deleteData = [...contextData];
+        const deletedData = deleteData.filter((value) => parseInt(value.id) !== parseInt(id));
+        console.log(deletedData, ">>>>>>>>");
+        setcontextData(deletedData);
+        // setCurrentPage(1);
     };
 
     return <>
@@ -219,8 +216,7 @@ const Table = (props) => {
                                     <td><img src={data.receipt} width={50} height={50} alt="" /></td>
                                     <td><Link to={`/transection/${data.id}`}>Edit</Link></td>
                                     <td><Link to={`/view-data/${data.id}`}>View</Link></td>
-                                    <td><i onClick={() => deleteData(data.id)} className="fa fa-trash-o" style={{ fontSize: 25,cursor:"pointer" }}></i></td>
-                                    <ToastContainer />
+                                    <td><i onClick={() => deleteData(data.id)} className="fa fa-trash-o" style={{ fontSize: 25 }}></i></td>
                                 </tr>
                             </tbody>
                         )
