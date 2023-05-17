@@ -75,10 +75,12 @@ const ViewData = () => {
 
 
     const logout = () => {
+        if(window.confirm("Are you sure you want to delete") === true) {
 
-        cookie1.remove('tempdata',{path: '/'});
-        window.location.reload();
-        navigate('/public/login');
+            cookie1.remove('tempdata',{path: '/'});
+            window.location.reload();
+            navigate('/public/login');
+        }
 
     }
 //     {

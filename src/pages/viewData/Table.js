@@ -168,17 +168,20 @@ const Table = (props) => {
     const dispatch = useDispatch();
 
     const deleteData = (id) => {
-        toast.error('User Deleted', {
-            position: toast.POSITION.TOP_RIGHT
-        });
+        if(window.confirm("Are you sure you want to delete") === true) {
 
-        setTimeout(() => {
-            
-            const deleteData = [...reduxData];
-            const deletedData = deleteData.filter((value) => parseInt(value.id) !== parseInt(id));
-            dispatch(deletetransection(deletedData))
-            setCurrentPage(1)
-        }, 1000);
+            toast.error('User Deleted', {
+                position: toast.POSITION.TOP_RIGHT
+            });
+    
+            setTimeout(() => {
+                
+                const deleteData = [...reduxData];
+                const deletedData = deleteData.filter((value) => parseInt(value.id) !== parseInt(id));
+                dispatch(deletetransection(deletedData))
+                setCurrentPage(1)
+            }, 1000);
+        }
 
     };
 
