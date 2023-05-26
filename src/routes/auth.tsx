@@ -4,7 +4,7 @@ import ViewData from "../pages/viewData/ViewData";
 import Pdata from "../pages/viewData/User";
 import { useEffect } from "react";
 import { Cookies } from 'react-cookie';
-
+import * as React from "react";
 
 const Auth = ()=>{
 

@@ -5,24 +5,30 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { adduser } from "../../redux-duck/registerslice";
+import * as React from "react";
+import { RootState } from "../../redux-duck/store";
+import { RegisterForm, RegisterType } from "../../interface/app_interface";
 
-const Register = () => {
+
+
+const Register:React.FunctionComponent  = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
 
-    const reduxData = useSelector((state) => state.register)
+    const reduxData = useSelector((state:RootState) => state.register)
 
 
     const values = {
+        id:0,
         uname: "",
         email: "",
         password: "",
     }
 
 
-    const [foValues, setfoValues] = useState(values);
-    const [issubmit, setIssubmit] = useState(false);
+    const [foValues, setfoValues] = useState<RegisterType>(values);
+    const [issubmit, setIssubmit] = useState<boolean>(false);
 
 
 
@@ -31,14 +37,14 @@ const Register = () => {
         email: yup.string().required('Please enter your Name'),
         password: yup.string().min(4).required('Please enter your Password')
     })
-    const { register, handleSubmit, formState: { errors } } = useForm({
+    const { register, handleSubmit, formState: { errors } } = useForm<RegisterForm>({
         resolver: yupResolver(schema)
     });
 
 
 
 
-    const onSubmit = async (data) => {
+    const onSubmit = async (data:RegisterForm) => {
 
         setIssubmit(true)
 
@@ -79,18 +85,18 @@ const Register = () => {
                 <h1>Register</h1>
                 <div className="content">
                     <div className="input-field">
-                        <input type="text" name="uname" placeholder="Name" {...register("uname")} />
-                        <p className="error">{errors.uname?.message}</p>
+                        <input type="text"  placeholder="Name" {...register("uname")} />
+                        <p className="error">{errors.uname?.message?.toString()}</p>
                     </div>
                     <div className="input-field">
-                        <input type="email" name="email" placeholder="Email"  {...register("email")} />
-                        <p className="error">{errors.email?.message}</p>
+                        <input type="email"  placeholder="Email"  {...register("email")} />
+                        <p className="error">{errors.email?.message?.toString()}</p>
                         
                         
                     </div>
                     <div className="input-field">
-                        <input type="password" name="password" placeholder="Password" {...register("password")} />
-                        <p className="error">{errors.password?.message}</p>
+                        <input type="password" placeholder="Password" {...register("password")} />
+                        <p className="error">{errors.password?.message?.toString()}</p>
 
                     </div>
                 </div>

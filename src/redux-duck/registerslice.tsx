@@ -1,4 +1,5 @@
-import { createSlice} from '@reduxjs/toolkit'
+import { PayloadAction, createSlice} from '@reduxjs/toolkit'
+import { RegisterType } from '../interface/app_interface'
 
 const initialState = [{uname:"Sanisinh",email:"xyz@gmail.com",password:"123456",id:1}]
 
@@ -8,7 +9,7 @@ export const registerSlice = createSlice({
     name: 'register',
     initialState,
     reducers: {
-        adduser :(state,action)=>{
+        adduser :(state:RegisterType[],action:PayloadAction<any>)=>{
             if (state.length === 0) {
                 return state = action.payload
             } else {
@@ -22,4 +23,4 @@ export const registerSlice = createSlice({
 
 
 export default registerSlice.reducer;
-export const {adduser,userlogin} = registerSlice.actions
+export const {adduser} = registerSlice.actions

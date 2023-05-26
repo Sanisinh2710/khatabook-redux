@@ -1,5 +1,8 @@
 
 
+
+
+
 export const initialState = [
     {
         remarks: "Uttam",
@@ -11,7 +14,7 @@ export const initialState = [
         ttype: "Home Expense",
         monthYear: "Feb 2023",
         tdate: "2024-01-03",
-        id: "1",
+        id: 1,
     },
     {
         remarks: "dfbvzdv",
@@ -23,13 +26,13 @@ export const initialState = [
         ttype: "Personal  Expense",
         monthYear: "Jun 2023",
         tdate: "2023-05-04",
-        id: "2",
+        id: 2,
     },
     {
         tdate: "2023-05-04",
         monthYear: "Feb 2023",
         ttype: "Personal  Expense",
-        amount: "34234",
+        amount: 34234,
         fromAccount: "Personal Account",
         toAccount: "My Dream Home",
         receipt:
@@ -41,7 +44,7 @@ export const initialState = [
         tdate: "2023-05-10",
         monthYear: "Mar 2023",
         ttype: "Personal  Expense",
-        amount: "4000",
+        amount: 4000,
         fromAccount: "Personal Account",
         toAccount: "Core Realtors",
         receipt:
@@ -53,7 +56,7 @@ export const initialState = [
         tdate: "2023-05-09",
         monthYear: "May 2023",
         ttype: "Home Expense",
-        amount: "34235",
+        amount: 34235,
         fromAccount: "Personal Account",
         toAccount: "My Dream Home",
         receipt:
@@ -65,7 +68,7 @@ export const initialState = [
         tdate: "2023-05-05",
         monthYear: "May 2023",
         ttype: "Home Expense",
-        amount: "8000",
+        amount: 8000,
         fromAccount: "Real Living",
         toAccount: "Personal Account",
         receipt:
@@ -77,7 +80,7 @@ export const initialState = [
         tdate: "2023-05-11",
         monthYear: "Jan 2023",
         ttype: "Personal  Expense",
-        amount: "500",
+        amount: 500,
         fromAccount: "Real Living",
         toAccount: "Full Circle",
         receipt:

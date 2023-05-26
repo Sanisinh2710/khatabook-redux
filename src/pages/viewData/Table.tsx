@@ -4,20 +4,25 @@ import { useDispatch, useSelector } from "react-redux";
 import { deletetransection } from "../../redux-duck/transectionslice";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { RootState } from "../../redux-duck/store";
+import * as React from 'react';
+import { TransectionType, sort} from "../../interface/app_interface";
 
 let date = new Date();
 let year = date.getFullYear();
 const months = [`Jan ${year}`, `Feb ${year}`, `Mar ${year}`, `Apr ${year}`, `May ${year}`, `Jun ${year}`, `Jul ${year}`, `Aug ${year}`, `Sep ${year}`, `Oct ${year}`, `Nov ${year}`, `Dec ${year}`]
+interface tableType {
+    records :   Record<string, any>[]
+} 
 
-const Table = (props) => {
+const Table :  React.FunctionComponent<tableType> = (props) => {
 
     const records = props.records;
 
-    const reduxData = useSelector((state) => state.transection)
+    const reduxData:TransectionType[] = useSelector((state:RootState) => state.transection)
     
     const [data, setData] = useState(records)
-    const [sortedField, setSortedField] = useState({});
+    const [sortedField, setSortedField] = useState<sort>({ key : "" ,direction : ""});
 
 
     useEffect(() => {
@@ -52,13 +57,13 @@ const Table = (props) => {
             if (sortedField.direction === 'ascending') {
                 datanew.sort((a, b) => {
 
-                    return new Date(a[sortedField.key]) - new Date(b[sortedField.key])
-
+                    return new Date(a[sortedField.key]).valueOf() - new Date(b[sortedField.key]).valueOf()
+ 
                 })
             } else if (sortedField.direction === 'descending') {
                 datanew.sort((a, b) => {
 
-                    return new Date(b[sortedField.key]) - new Date(a[sortedField.key])
+                    return new Date(b[sortedField.key]).valueOf() - new Date(a[sortedField.key]).valueOf()
 
                 })
             }
@@ -98,7 +103,7 @@ const Table = (props) => {
         //eslint-disable-next-line
     }, [sortedField])
 
-    const sort = key => {
+    const sort = (key:string) => {
 
         setCurrentPage(1)
         let direction = 'ascending';
@@ -131,7 +136,7 @@ const Table = (props) => {
         }
     }
 
-    function changeCurrentPage(id) {
+    function changeCurrentPage(id:number) {
 
         setCurrentPage(id)
 
@@ -145,7 +150,7 @@ const Table = (props) => {
         }
     }
 
-    const search = (e) => {
+    const search = (e:React.ChangeEvent<HTMLInputElement>) => {
 
 
         if (e.target.value === "") {
@@ -167,7 +172,7 @@ const Table = (props) => {
 
     const dispatch = useDispatch();
 
-    const deleteData = (id) => {
+    const deleteData = (id:number) => {
         if(window.confirm("Are you sure you want to delete") === true) {
 
             toast.error('User Deleted', {
@@ -177,7 +182,7 @@ const Table = (props) => {
             setTimeout(() => {
                 
                 const deleteData = [...reduxData];
-                const deletedData = deleteData.filter((value) => parseInt(value.id) !== parseInt(id));
+                const deletedData = deleteData.filter((value:TransectionType) => Number(value.id) !== Number(id));
                 dispatch(deletetransection(deletedData))
                 setCurrentPage(1)
             }, 1000);
@@ -185,9 +190,9 @@ const Table = (props) => {
 
     };
 
-    return <>
+    return (<>
         <div className="search">
-            <input type="text" placeholder="Search.." name="search" onInput={search} />
+            <input type="text" placeholder="Search.." name="search" onChange={e =>search(e)} />
         </div>
         {
             records1.length > 0 ? <>
@@ -272,7 +277,7 @@ const Table = (props) => {
 
 
 
-    </>
+    </>)
 }
 
 export default Table;

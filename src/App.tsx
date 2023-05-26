@@ -10,8 +10,9 @@ import  Unauth  from './routes/unauth';
 import { store } from './redux-duck/store'
 import { Provider } from 'react-redux'
 import { CookiesProvider } from 'react-cookie';
+import * as React from 'react'
 
-const App = () => {
+const App  = () => {
 
 
     return (

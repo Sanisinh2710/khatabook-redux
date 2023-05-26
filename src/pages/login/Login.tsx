@@ -3,29 +3,34 @@ import './login.css'
 import { useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useSelector } from 'react-redux';
 import { useCookies } from 'react-cookie';
 import { ThreeDots } from 'react-loader-spinner';
+import { RootState } from '../../redux-duck/store';
+import * as React from 'react'
+import { LoginForm } from '../../interface/app_interface';
 
 
-const Login = () => {
+const Login:React.FunctionComponent  = () => {
     const navigate = useNavigate();
-    const values = {
+
+    const values :LoginForm = {
         email: "",
-        password: ""
+        password: "",
+        token : ""
     }
 
    
     const [loading, setloading] = useState(false)
     const [cookies,setCookie] = useCookies(['tempdata']);
     console.log(cookies)    ;
-    const reduxData = useSelector((state) => state.register)
+    const reduxData = useSelector((state:RootState) => state.register)
 
     const data = reduxData
 
-    const [foValues, setfoValues] = useState(values);
-    const [issubmit, setIssubmit] = useState(false);
+    const [foValues, setfoValues] = useState<LoginForm>(values);
+    const [issubmit, setIssubmit] = useState<boolean>(false);
 
 
     const schema = yup.object().shape({
@@ -33,7 +38,7 @@ const Login = () => {
         password: yup.string().required('Please enter your Password')
     })
 
-    const { register, handleSubmit, formState: { errors } } = useForm({
+    const { register, handleSubmit, formState: { errors } } = useForm<LoginForm>({
         resolver: yupResolver(schema)
     });
 
@@ -74,7 +79,7 @@ const Login = () => {
         //eslint-disable-next-line
     }, [issubmit])
 
-    const onSubmit = async (data) => {
+    const onSubmit : SubmitHandler<LoginForm> = async (data) => {
 
         setIssubmit(true)
 
@@ -102,7 +107,7 @@ const Login = () => {
                 width="80"
                 radius="9"
                 color="purple"
-                wrapperStyle={{marginTop:250,marginLeft:600,}}
+                wrapperStyle={{marginTop:"250",marginLeft:"600"}}
                 
             />
             </>:
@@ -112,12 +117,12 @@ const Login = () => {
                     <h1>Login</h1>
                     <div className="content">
                         <div className="input-field">
-                            <input type="email" placeholder="Email" name='email' {...register('email')} />
-                            <p className='error'>{errors.email?.message}</p>
+                            <input type="email" placeholder="Email"  {...register('email')} />
+                            <p className='error'>{errors.email?.message?.toString()}</p>
                         </div>
                         <div className="input-field">
-                            <input type="password" placeholder="Password" name='password' {...register('password')} />
-                            <p className='error'>{errors.password?.message}</p>
+                            <input type="password" placeholder="Password"  {...register('password')} />
+                            <p className='error'>{errors.password?.message?.toString()}</p>
                         </div>
     
                     </div>
