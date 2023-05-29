@@ -34,7 +34,26 @@ const Register:React.FunctionComponent  = () => {
 
     const schema = yup.object().shape({
         uname: yup.string().required('Please enter your Name'),
-        email: yup.string().required('Please enter your Name'),
+        email: yup.string().required('Please enter your Email').test("user exists","Email is already registered",(email)=>{
+            let flag:boolean = false;            
+            console.log(reduxData);
+            
+            for (let key in reduxData) {
+                if (reduxData[key].email === email) {
+                    console.log(reduxData[key].email)
+                    console.log(email)
+                    flag = true;
+                    break;
+                }
+            }
+
+            if (flag) {
+                return false;
+            }else {
+                return true;
+            }
+
+        }),
         password: yup.string().min(4).required('Please enter your Password')
     })
     const { register, handleSubmit, formState: { errors } } = useForm<RegisterForm>({
